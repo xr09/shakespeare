@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icons" >
+    <file>imgs/quit.png</file>
+    <file>imgs/amarok.png</file>
+    <file>imgs/acercaQT.png</file>
+    <file>imgs/shakespeare.png</file>
+    <file>imgs/clear.png</file>
+    <file>imgs/us-es.png</file>
+    <file>imgs/es-us.png</file>
+  </qresource>
+</RCC>
