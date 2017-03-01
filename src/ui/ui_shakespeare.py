@@ -136,12 +136,9 @@ class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
         u"<h3>Shakespeare %s </h3>\
         English/Spanish dictionary <br/>\
         <hr>(C) Manuel E. Gutierrez 2007-2013 <br/>\
-         dhunterkde@gmail.com\
-         <br/><br/>This program is licensed under the GPL v3<br />\
-         <p>Get new versions at:<br />\
-         http://github.org/xr09/shakespeare</p>\
-         <p>Visit the developer's blog:<br />\
-         http://xr09.github.io/</p>" % unicode(VERSION))
+         <br/>This program is licensed under the GPL v3<br />\
+         <br />\
+         http://github.org/xr09/shakespeare</p>" % unicode(VERSION))
 
     @QtCore.pyqtSignature('')
     def on_actionAbout_Qt_triggered(self):
