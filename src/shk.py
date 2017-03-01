@@ -1,8 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-2009 - 2013 Manuel E. Gutierrez <dhunterkde@gmail.com>
-"""
 
 import sys
 import argparse

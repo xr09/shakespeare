@@ -1,10 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-Created on Dec 29, 2009 on StormWind
-
-2009 - 2013 Manuel E. Gutierrez <dhunterkde@gmail.com>
-"""
 
 import sys
 from PyQt4.QtGui import QApplication

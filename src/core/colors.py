@@ -1,8 +1,4 @@
-'''
-Created on Oct 23, 2011
 
-@author: dhunter
-'''
 
 class Color(object):
     purple = '\33[95m'

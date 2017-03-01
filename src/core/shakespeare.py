@@ -1,10 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-'''
-Created on Dec 29, 2009 on StormWind
-
-@author: dhunter
-'''
 
 import sqlite3
 import os

@@ -1,10 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-'''
-Created on Dec 29, 2009 on StormWind
 
-@author: dhunter
-'''
+
 from PyQt4 import QtCore, QtGui
 from form_ui import Ui_MainWindow
 from core.shakespeare import Shakespeare
