@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt4.QtGui import QApplication
+from PyQt5.QtWidgets import QApplication
 from ui.ui_shakespeare import UI_Shakespeare
 
 if __name__ == '__main__':
