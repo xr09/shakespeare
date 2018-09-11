@@ -34,7 +34,7 @@ class UI_Shakespeare(QMainWindow, Ui_MainWindow):
             self.on_exact_checkBox_stateChanged)
         self.searchtype_comboBox.currentIndexChanged.connect(
             self.on_searchtype_comboBox_currentIndexChanged)
-
+    
     # hide with Escape
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
