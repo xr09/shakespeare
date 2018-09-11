@@ -5,7 +5,7 @@
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QSystemTrayIcon,
     QAction, qApp, QMenu, QMessageBox)
 from PyQt5.QtGui import (QKeySequence, QIcon, QColor)
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import (Qt, pyqtSlot)
 from .form_ui import Ui_MainWindow
 from core.shakespeare import Shakespeare
 
@@ -34,12 +34,12 @@ class UI_Shakespeare(QMainWindow, Ui_MainWindow):
             self.on_exact_checkBox_stateChanged)
         self.searchtype_comboBox.currentIndexChanged.connect(
             self.on_searchtype_comboBox_currentIndexChanged)
-        self.actionAbout.triggered.connect(self.on_actionAbout_triggered)
-        self.actionAbout_Qt.triggered.connect(self.on_actionAbout_Qt_triggered)
 
-    def testHide(self):
-        print("Hidding!")
-
+    # hide with Escape
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.hide()
+   
     def rightCorner(self):
         widget = QApplication.desktop()
         screenwidth = widget.width()
@@ -61,11 +61,6 @@ class UI_Shakespeare(QMainWindow, Ui_MainWindow):
         trayIconMenu.addAction(quitAction)
         self.trayIcon.setContextMenu(trayIconMenu)
         self.trayIcon.show()
-        # hide with Escape
-        # esc_shorcut = QShortcut(
-        #                               QKeySequence(
-        #                               Qt.Key_Escape), self)
-        # self.connect(esc_shorcut, SIGNAL("activated()"), self.hide)
 
     def restore(self, reason):
         """Toggle main window visibility"""
@@ -128,6 +123,7 @@ class UI_Shakespeare(QMainWindow, Ui_MainWindow):
     def on_actionQuit_triggered(self):
         qApp.quit()
 
+    @pyqtSlot()
     def on_actionAbout_triggered(self):
         QMessageBox.about(self, u"About Shakespeare",
         u"<h3>Shakespeare %s </h3>\
@@ -137,8 +133,9 @@ class UI_Shakespeare(QMainWindow, Ui_MainWindow):
          <br />\
          http://github.org/xr09/shakespeare</p>" % VERSION)
 
+    @pyqtSlot()
     def on_actionAbout_Qt_triggered(self):
-        QMessageBox.aboutQt(self)
+        QMessageBox.aboutQt(self, "About Qt")
 
     def closeEvent(self, event):
         self.hide()
