@@ -7,7 +7,6 @@ from core.shakespeare import Shakespeare
 from core.colors import colorize, Color
 
 
-
 def cli_parser():
     '''CLI Arguments Parser helper function'''
     parser = argparse.ArgumentParser(description='Process word to search.')
@@ -24,13 +23,14 @@ def term_printer(result, reverse):
     if reverse:
         color1, color2 = color2, color1
     for word1, word2 in result:
-        print(u"{:20} : {}".format(colorize(word1, color1), colorize(word2, color2)))
+        print(u"{:20} : {}".format(colorize(word1, color1),
+            colorize(word2, color2)))
 
 
 def main():
     ''' Shakespeare CLI Main function '''
     args = cli_parser()
-    word = unicode(" ".join(args.word), 'utf-8')
+    word = " ".join(args.word)
     engine = Shakespeare()
     result = engine.search(word, reverse=args.reverse)
     if result:
@@ -46,7 +46,7 @@ def main():
             term_printer(invert_result, reverse=rev)
             return 0
         else:
-            print(u"Not found: " + colorize("\"%s\"" % word, Color.yellow))
+            print("Not found: " + colorize("\"%s\"" % word, Color.yellow))
             return 1
 
 
