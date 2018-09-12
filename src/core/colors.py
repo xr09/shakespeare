@@ -12,12 +12,12 @@ def colorize(s, c=Color.green):
     return c + s + '\33[0m'
 
 def _test():
-    print colorize("Hello world in purple", Color.purple)
-    print colorize("Hello world in green", Color.green)
-    print colorize("Hello world in blue", Color.blue)
-    print colorize("Hello world in red", Color.red)
-    print colorize("Hello world in yellow", Color.yellow)
-    print colorize("Hello world in navy", Color.navy)
+    print(colorize("Hello world in purple", Color.purple))
+    print(colorize("Hello world in green", Color.green))
+    print(colorize("Hello world in blue", Color.blue))
+    print(colorize("Hello world in red", Color.red))
+    print(colorize("Hello world in yellow", Color.yellow))
+    print(colorize("Hello world in navy", Color.navy))
     
 if __name__ == '__main__':
     _test()

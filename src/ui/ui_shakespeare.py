@@ -2,36 +2,46 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt4 import QtCore, QtGui
-from form_ui import Ui_MainWindow
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QSystemTrayIcon,
+    QAction, qApp, QMenu, QMessageBox)
+from PyQt5.QtGui import (QKeySequence, QIcon, QColor)
+from PyQt5.QtCore import (Qt, pyqtSlot)
+from .form_ui import Ui_MainWindow
 from core.shakespeare import Shakespeare
 
 VERSION = '0.7beta1'
 BUILD_DATE = '2013-08-03'
 
 
-class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
+class UI_Shakespeare(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(UI_Shakespeare, self).__init__(parent)
         self.setupUi(self)
         self.result_TextEdit.setFontPointSize(10)
-        self.actionQuit.setShortcut(QtGui.QKeySequence('Ctrl+Q'))
+        self.actionQuit.setShortcut(QKeySequence('Ctrl+Q'))
+        self.actionQuit.triggered.connect(self.on_actionQuit_triggered)
         self.engine = Shakespeare()
         self.search_lineEdit.setFocus()
         self.setupSysTray()
         self.rightCorner()
 
-#    def writeSettings(self):   #TODO:
-#        """
-#        Save the size and position of the window to keep user preferences.
-#        This is needed for gnome and others desktops with the taskbar up,
-#        or just for kinky users
-#        """
-#        settings = QSettings(QSettings.NativeFormat, QSettings.UserScope,
-#        "codeninja", 'shakespeare')
-
+    def connectActions(self):
+        self.language_pushButton.triggered.connect(
+            self.on_language_pushButton_clicked)
+        self.search_lineEdit.textChanged.connect(
+            self.on_search_lineEdit_textChanged)
+        self.exact_checkBox.stateChanged.connect(
+            self.on_exact_checkBox_stateChanged)
+        self.searchtype_comboBox.currentIndexChanged.connect(
+            self.on_searchtype_comboBox_currentIndexChanged)
+    
+    # hide with Escape
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.hide()
+   
     def rightCorner(self):
-        widget = QtGui.QApplication.desktop()
+        widget = QApplication.desktop()
         screenwidth = widget.width()
         screenheight = widget.height()
         windowsize = self.size()
@@ -43,26 +53,15 @@ class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
         self.move(x, y)
 
     def setupSysTray(self):
-        self.trayIcon = QtGui.QSystemTrayIcon(
-                        QtGui.QIcon(':/icons/imgs/shakespeare.png'))
-        self.connect(self.trayIcon,
-                     QtCore.SIGNAL(
-                     "activated(QSystemTrayIcon::ActivationReason)"),
-                     self.restore)
-        quitAction = QtGui.QAction(QtGui.QIcon(":/icons/imgs/quit.png"),
-                                   "Quit", self)
-        self.connect(quitAction, QtCore.SIGNAL("triggered()"), QtGui.qApp.quit)
-        trayIconMenu = QtGui.QMenu(self)
+        self.trayIcon = QSystemTrayIcon(QIcon(':/icons/imgs/shakespeare.png'))
+        self.trayIcon.activated.connect(self.restore)
+        quitAction = QAction(QIcon(":/icons/imgs/quit.png"), "Quit", self,
+            triggered=qApp.quit)
+        trayIconMenu = QMenu(self)
         trayIconMenu.addAction(quitAction)
         self.trayIcon.setContextMenu(trayIconMenu)
         self.trayIcon.show()
-        # hide with Escape
-        esc_shorcut = QtGui.QShortcut(
-                                      QtGui.QKeySequence(
-                                      QtCore.Qt.Key_Escape), self)
-        self.connect(esc_shorcut, QtCore.SIGNAL("activated()"), self.hide)
 
-    @QtCore.pyqtSignature("QSystemTrayIcon::ActivationReason")
     def restore(self, reason):
         """Toggle main window visibility"""
         if reason == 3:
@@ -70,13 +69,11 @@ class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
                 self.hide()
             else:
                 self.update()
-                self.show()
+                self.show()    
 
-    @QtCore.pyqtSignature("")
     def on_clear_pushButton_clicked(self):
-        self.search()
-
-    @QtCore.pyqtSignature("")
+         self.search()
+    
     def on_language_pushButton_clicked(self):
         self.search()
 
@@ -90,16 +87,16 @@ class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
         else:
             color1, color2 = 'Blue', 'Red'
         for e, s in result:
-            self.result_TextEdit.setTextColor(QtGui.QColor(color1))
+            self.result_TextEdit.setTextColor(QColor(color1))
             self.result_TextEdit.insertPlainText(e)
-            self.result_TextEdit.setTextColor(QtGui.QColor('Black'))
+            self.result_TextEdit.setTextColor(QColor('Black'))
             self.result_TextEdit.insertPlainText(' : ')
-            self.result_TextEdit.setTextColor(QtGui.QColor(color2))
+            self.result_TextEdit.setTextColor(QColor(color2))
             self.result_TextEdit.insertPlainText('  ' + s + '\n')
 
     def search(self):
         self.result_TextEdit.clear()
-        if not self.search_lineEdit.text().length():
+        if not len(self.search_lineEdit.text()):
             self.statusbar.clearMessage()
             return
         result = self.engine.search(self.search_lineEdit.text(),
@@ -111,40 +108,37 @@ class UI_Shakespeare(QtGui.QMainWindow, Ui_MainWindow):
             self.statusMessage(len(result))
             return
         self.renderText(result, self.language_pushButton.isChecked())
-
-    @QtCore.pyqtSignature("QString")
+    
     def on_search_lineEdit_textChanged(self):
         self.search()
-
-    @QtCore.pyqtSignature('int')
+    
     def on_exact_checkBox_stateChanged(self):
         self.search()
         self.searchtype_comboBox.setVisible(
-                                        not self.exact_checkBox.isChecked())
-
-    @QtCore.pyqtSignature('int')
+            not self.exact_checkBox.isChecked())
+    
     def on_searchtype_comboBox_currentIndexChanged(self):
         self.search()
-
-    @QtCore.pyqtSignature('')
+    
     def on_actionQuit_triggered(self):
-        QtGui.qApp.quit()
+        qApp.quit()
 
-    @QtCore.pyqtSignature('')
+    @pyqtSlot()
     def on_actionAbout_triggered(self):
-        QtGui.QMessageBox.about(self, u"About Shakespeare",
+        QMessageBox.about(self, u"About Shakespeare",
         u"<h3>Shakespeare %s </h3>\
         English/Spanish dictionary <br/>\
         <hr>(C) Manuel E. Gutierrez 2007-2013 <br/>\
          <br/>This program is licensed under the GPL v3<br />\
          <br />\
-         http://github.org/xr09/shakespeare</p>" % unicode(VERSION))
+         http://github.org/xr09/shakespeare</p>" % VERSION)
 
-    @QtCore.pyqtSignature('')
+    @pyqtSlot()
     def on_actionAbout_Qt_triggered(self):
-        QtGui.QMessageBox.aboutQt(self)
+        QMessageBox.aboutQt(self, "About Qt")
 
-    @QtCore.pyqtSignature("")
     def closeEvent(self, event):
         self.hide()
         event.ignore()
+
+from . import res_rc

@@ -49,4 +49,4 @@ class Shakespeare(object):
 if __name__ == '__main__':
     s = Shakespeare()
     # first, search for some love :)
-    print s.search('love')
+    print(s.search('love'))
