@@ -31,9 +31,9 @@ class Shakespeare(object):
         if exact:
             sql_search = u'{}'
         else:
-            if searchtype is 0:
+            if searchtype == 0:
                 sql_search = u'{}%%' # starts with
-            elif searchtype is 1:
+            elif searchtype == 1:
                 sql_search = u'%%{}' # ends with
             else:
                 sql_search = u'%%{}%%' # contains
